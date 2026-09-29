@@ -44,7 +44,7 @@ Para una pantalla con estado local elegiria `setState`, porque resuelve el probl
 
 ### 6. ¿Por que la pantalla Future siguio mostrando Wi-Fi?
 
-La pantalla Future conserva el resultado de la consulta que hizo en ese momento; no recibe avisos posteriores del sistema. El dato era correcto para el instante consultado, pero correspondia a un momento anterior cuando la red ya habia cambiado. La actualizacion requiere volver a pulsar Consultar. La prueba de alternar la red fisicamente debe confirmarse al grabar el video en un dispositivo.
+En el demo, la pestaña Con Stream muestra Wi-Fi al inicio; al apagar la red, cambia sola a Sin conexion alrededor del segundo 5 y aumenta el contador de cambios. Con Future no se hace ese seguimiento: muestra el resultado de la ultima consulta hasta pulsar Consultar ahora. Si sigue mostrando Wi-Fi despues de apagarlo, no es un dato incorrecto, sino una lectura que quedo vieja cuando cambio la red.
 
 ### 7. ¿Que ocurriria sin cancelar la suscripcion del Cubit?
 
