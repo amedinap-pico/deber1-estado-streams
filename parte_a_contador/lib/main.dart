@@ -1,31 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'data/repositories/contador_prefs_repository.dart';
 import 'domain/usecases/decrementar.dart';
 import 'domain/usecases/incrementar.dart';
 import 'domain/usecases/obtener_contador.dart';
-import 'presentation/estado/contador_cubit.dart';
 import 'presentation/pantallas/pantalla_visor.dart';
 
 void main() {
-  Bloc.observer = ContadorObserver();
   final repository = ContadorPrefsRepository();
 
-  runApp(
-    BlocProvider(
-      create: (_) => ContadorCubit(
-        obtenerContador: ObtenerContador(repository),
-        casoIncrementar: Incrementar(repository),
-        casoDecrementar: Decrementar(repository),
-      )..cargar(),
-      child: const MyApp(),
-    ),
-  );
+  runApp(MyApp(repository: repository));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, required this.repository});
+
+  final ContadorPrefsRepository repository;
 
   @override
   Widget build(BuildContext context) {
@@ -35,19 +25,11 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
         useMaterial3: true,
       ),
-      home: const PantallaVisor(),
+      home: PantallaVisor(
+        obtenerContador: ObtenerContador(repository),
+        casoIncrementar: Incrementar(repository),
+        casoDecrementar: Decrementar(repository),
+      ),
     );
-  }
-}
-
-class ContadorObserver extends BlocObserver {
-  @override
-  void onChange(BlocBase<Object?> bloc, Change<Object?> change) {
-    super.onChange(bloc, change);
-    if (bloc is ContadorCubit) {
-      debugPrint(
-        '${bloc.runtimeType}: ${change.currentState} -> ${change.nextState}',
-      );
-    }
   }
 }
